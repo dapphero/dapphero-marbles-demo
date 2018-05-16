@@ -1,0 +1,163 @@
+{
+    "name": "aws-network",
+    "x-type": "hlfv1",
+    "version": "1.0.0",
+    "client": {
+        "credentialStore": {
+            "path": "./hfc-key-store"
+        },
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300",
+                    "eventHub": "300",
+                    "eventReg": "300"
+                },
+                "orderer": "300"
+            }
+        }
+    },
+    "channels": {
+        "mychannel": {
+            "orderers": [
+                "orderer.example.com"
+            ],
+            "peers": {
+                "peer0.org1.example.com": {
+                    "endorsingPeer": true,
+                    "chaincodeQuery": true,
+                    "eventSource": true
+                },
+                "peer0.org2.example.com": {
+                    "endorsingPeer": true,
+                    "chaincodeQuery": true,
+                    "eventSource": true
+                },
+                "peer0.org3.example.com": {
+                    "endorsingPeer": true,
+                    "chaincodeQuery": true,
+                    "eventSource": true
+                }
+            },
+            "chaincodes": {
+                "marbles": "v4"
+            }
+        }
+    },
+    "organizations": {
+        "org1": {
+            "mspid": "org1MSP",
+            "peers": [
+                "peer0.org1.example.com"
+            ],
+            "certificateAuthorities": [
+                "ca.org1.example.com"
+            ]
+        },
+        "org2": {
+            "mspid": "org2MSP",
+            "peers": [
+                "peer0.org2.example.com"
+            ],
+            "certificateAuthorities": [
+                "ca.org2.example.com"
+            ]
+        },
+        "org3": {
+            "mspid": "org3MSP",
+            "peers": [
+                "peer0.org3.example.com"
+            ],
+            "certificateAuthorities": [
+                "ca.org3.example.com"
+            ]
+        }
+    },
+    "orderers": {
+        "orderer.example.com": {
+            "url": "grpcs://54.202.17.239:7050",
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer.example.com"
+            },
+            "tlsCACerts": {
+                "path": "crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem"
+            }
+        }
+    },
+    "peers": {
+        "peer0.org1.example.com": {
+            "url": "grpcs://54.202.17.239:7051",
+            "eventUrl": "grpcs://54.202.17.239:7053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.org1.example.com"
+            },
+            "tlsCACerts": {
+                "path": "crypto-config/peerOrganizations/org1.example.com/msp/tlscacerts/tlsca.org1.example.com-cert.pem"
+            }
+        },
+        "peer0.org2.example.com": {
+            "url": "grpcs://54.202.17.239:8051",
+            "eventUrl": "grpcs://54.202.17.239:8053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.org2.example.com"
+            },
+            "tlsCACerts": {
+                "path": "crypto-config/peerOrganizations/org2.example.com/msp/tlscacerts/tlsca.org2.example.com-cert.pem"
+            }
+        },
+        "peer0.org3.example.com": {
+            "url": "grpcs://54.202.17.239:9051",
+            "eventUrl": "grpcs://54.202.17.239:9053",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.org3.example.com"
+            },
+            "tlsCACerts": {
+                "path": "crypto-config/peerOrganizations/org3.example.com/msp/tlscacerts/tlsca.org3.example.com-cert.pem"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.org1.example.com": {
+            "url": "https://54.202.17.239:7054",
+            "caName": "ca-org1",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "affiliation": "group1",
+                    "enrollId": "Admin@org1.example.com",
+                    "enrollSecret": "adminpw"
+                }
+            ]
+        },
+        "ca.org2.example.com": {
+            "url": "https://54.202.17.239:8054",
+            "caName": "ca-org2",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "affiliation": "group2",
+                    "enrollId": "Admin@org2.example.com",
+                    "enrollSecret": "adminpw"
+                }
+            ]
+        },
+        "ca.org3.example.com": {
+            "url": "https://54.202.17.239:9054",
+            "caName": "ca-org3",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "affiliation": "group3",
+                    "enrollId": "Admin@org3.example.com",
+                    "enrollSecret": "adminpw"
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "dapphero-marbles-demo",
+  "version": "0.0.1",
+  "description": "Run IBM's Marbles dapp in a Fabric network backed by an AWS cloud host instance provisioned using offical AWS CloudFormation templates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Hyperledger",
+    "Fabric",
+    "Marbles",
+    "Demo",
+    "AWS",
+    "Blockchain",
+    "DLT",
+    "Dapphero"
+  ],
+  "author": "Sebastian Tiedtke",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "commander": "^2.15.1",
+    "fabric-client": "^1.1.2"
+  }
+}
