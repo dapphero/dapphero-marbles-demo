@@ -10,38 +10,38 @@ function populate(connectionProfileCfg, cryptoCfg) {
   let configFilePath = path.join(__dirname, connectionProfileCfg);
   const creds = require(configFilePath)
 
-  const fc = FabricClient.loadFromConfig(configFilePath);
-  fc.initCredentialStores().then(() => {
-    return fc.getStateStore()
-  }).then((store) => {
-    console.log(`Attempting to prepopulate key/value store located at '${store._dir}.'`)
-    let promises = Object.keys(creds.organizations).map(org => {
-      let p = new Promise((resolve, reject) => {
-        glob(path.join(__dirname, `${cryptoCfg}/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/keystore/*_sk`), null, (err, privkeys) => {
-          if (err || privkeys.length < 1) {
-            console.error(`Unable to find private key: ${err}`)
-            reject(err)
-          }
+  let promises = Object.keys(creds.organizations).map(org => {
+    let p = new Promise((resolve, reject) => {
+      glob(path.join(__dirname, `${cryptoCfg}/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/keystore/*_sk`), null, (err, privkeys) => {
+        if (err || privkeys.length < 1) {
+          console.error(`Unable to find private key: ${err}`)
+          reject(err)
+        }
 
-          let userOpts = {
-            username: `Admin@${org}.example.com`,
-            mspid: `${org}MSP`,
-            _org: org,
-            cryptoContent: {
-              signedCert: path.join(__dirname, `${cryptoCfg}/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/signcerts/Admin@${org}.example.com-cert.pem`),
-              privateKey: privkeys[0]
-            },
-            skipPersistence: false
-          }
+        let userOpts = {
+          username: `Admin@${org}.example.com`,
+          mspid: `${org}MSP`,
+          _org: org,
+          cryptoContent: {
+            signedCert: path.join(__dirname, `${cryptoCfg}/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/signcerts/Admin@${org}.example.com-cert.pem`),
+            privateKey: privkeys[0]
+          },
+          skipPersistence: false
+        }
 
-          resolve(userOpts)
-        })
+        resolve(userOpts)
       })
-      return p
     })
+    return p
+  })
 
-    Promise.all(promises).then(adminOpts => {
-      let cbs = adminOpts.map((userOpts) => {
+  Promise.all(promises).then(adminOpts => {
+    let cbs = adminOpts.map((userOpts) => {
+      let fc = FabricClient.loadFromConfig(configFilePath);
+      return fc.initCredentialStores().then(() => {
+        return fc.getStateStore()
+      }).then(store => {
+        console.log(`Attempting to prepopulate key/value store for ${userOpts.username} located at '${store._dir}.'`)
         let obj = {}
         return fc.getUserContext(userOpts.username, true).then(user => {
           if (user !== null) {
@@ -60,11 +60,11 @@ function populate(connectionProfileCfg, cryptoCfg) {
           return obj
         })
       })
-      return Promise.all(cbs)
-    }).then(objs => {
-      console.log(objs)
-      console.log("All set. Key value store populated.")
     })
+    return Promise.all(cbs)
+  }).then(objs => {
+    console.log(objs)
+    console.log("All set. Key value store populated.")
   }).catch(err => {
     console.error(err)
     console.error("Someting went wrong")
