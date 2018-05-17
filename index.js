@@ -11,7 +11,8 @@ function populate(connectionProfileCfg, cryptoCfg, keyValueStorePath) {
   // Let's prepopulate the K/V store
   const creds = JSON.parse(fs.readFileSync(connectionProfileCfg, 'utf8'))
 
-  let promises = Object.keys(creds.organizations).map(org => {
+  let promises = Object.keys(creds.organizations).map(orgMSP => {
+    let org = orgMSP.substring(0, 4)
     let p = new Promise((resolve, reject) => {
       let priv = `${cryptoCfg}/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/keystore/*_sk`
       glob(priv, null, (err, privkeys) => {
@@ -22,7 +23,7 @@ function populate(connectionProfileCfg, cryptoCfg, keyValueStorePath) {
 
         let userOpts = {
           username: `Admin@${org}.example.com`,
-          mspid: `${org}MSP`,
+          mspid: `${orgMSP}`,
           _org: org,
           cryptoContent: {
             signedCert: `${cryptoCfg}/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/signcerts/Admin@${org}.example.com-cert.pem`,
@@ -60,7 +61,7 @@ function populate(connectionProfileCfg, cryptoCfg, keyValueStorePath) {
           }
         }).then(user => {
           obj.username = userOpts.username
-          return fc.getPeersForOrg(userOpts._org)
+          return fc.getPeersForOrg(userOpts.mspid)
         }).then(peers => {
           obj.peers = JSON.stringify(peers)
           return fc.queryChannels(peers[0], true)
