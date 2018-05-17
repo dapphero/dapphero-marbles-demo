@@ -3,7 +3,7 @@
     "x-type": "hlfv1",
     "version": "1.0.0",
     "client": {
-        "organization": "org1",
+        "organization": "org1MSP",
         "credentialStore": {
             "path": "crypto/kvs"
         },
@@ -46,7 +46,7 @@
         }
     },
     "organizations": {
-        "org1": {
+        "org1MSP": {
             "mspid": "org1MSP",
             "peers": [
                 "peer0.org1.example.com"
@@ -55,7 +55,7 @@
                 "ca.org1.example.com"
             ]
         },
-        "org2": {
+        "org2MSP": {
             "mspid": "org2MSP",
             "peers": [
                 "peer0.org2.example.com"
@@ -64,7 +64,7 @@
                 "ca.org2.example.com"
             ]
         },
-        "org3": {
+        "org3MSP": {
             "mspid": "org3MSP",
             "peers": [
                 "peer0.org3.example.com"
