@@ -1,0 +1,3 @@
+[submodule "appinstances/marbles1"]
+	path = appinstances/marbles1
+	url = https://github.com/dapphero/marbles.git
