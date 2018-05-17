@@ -13,9 +13,10 @@ function populate(connectionProfileCfg, cryptoCfg, keyValueStorePath) {
 
   let promises = Object.keys(creds.organizations).map(org => {
     let p = new Promise((resolve, reject) => {
-      glob(`${cryptoCfg}/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/keystore/*_sk`, null, (err, privkeys) => {
+      let priv = `${cryptoCfg}/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/keystore/*_sk`
+      glob(priv, null, (err, privkeys) => {
         if (err || privkeys.length < 1) {
-          console.error(`Unable to find private key: ${err}`)
+          console.error(`Unable to find private key in ${priv}: ${err}`)
           reject(err)
         }
 
