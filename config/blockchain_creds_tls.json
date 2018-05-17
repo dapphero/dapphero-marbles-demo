@@ -3,8 +3,9 @@
     "x-type": "hlfv1",
     "version": "1.0.0",
     "client": {
+        "organization": "org1",
         "credentialStore": {
-            "path": "./hfc-key-store"
+            "path": "crypto/kvs"
         },
         "connection": {
             "timeout": {
