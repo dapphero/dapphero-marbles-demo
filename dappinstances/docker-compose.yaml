@@ -1,0 +1,49 @@
+version: '2'
+
+networks:
+  marbles:
+
+services:
+
+  marbles_org1:
+    image: $IMAGE_NAME
+    extends:
+      file: base.yaml
+      service: marbles_org
+    environment:
+      - creds_filename=marbles_tls_org1.json
+    ports:
+      - 3001:3001
+    networks:
+      - marbles
+
+  marbles_org2:
+    image: $IMAGE_NAME
+    extends:
+      file: base.yaml
+      service: marbles_org
+    environment:
+      - creds_filename=marbles_tls_org2.json
+    ports:
+      - 3002:3001
+    networks:
+      - marbles
+
+  marbles_org3:
+    image: $IMAGE_NAME
+    extends:
+      file: base.yaml
+      service: marbles_org
+    environment:
+      - creds_filename=marbles_tls_org3.json
+    command: node app.js
+    volumes:
+        - ../crypto-config:/marbles/config/crypto-config
+        - ~/.hfc-key-store:/root/.hfc-key-store
+        - ~/.hfc-key-store:/marbles/config/crypto/kvs
+    ports:
+      - 3003:3001
+    networks:
+      - marbles
+    networks:
+      - marbles

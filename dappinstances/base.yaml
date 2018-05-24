@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+
+  marbles_org:
+    image: $IMAGE_NAME
+    tty: false
+    stdin_open: false
+    environment:
+      - creds_filename=marbles_tls_org1.json
+    command: node app.js
+    volumes:
+        - ../crypto-config:/marbles/config/crypto-config
+        - ~/.hfc-key-store:/root/.hfc-key-store
+        - ~/.hfc-key-store:/marbles/config/crypto/kvs
