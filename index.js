@@ -47,11 +47,19 @@ function populate(connectionProfileCfg, cryptoCfg, keyValueStorePath) {
         kvs_path = keyValueStorePath
       }
       creds.client = { credentialStore: { path: kvs_path } }
+      let cryptoSuite = FabricClient.newCryptoSuite()
+      fc.setCryptoSuite(cryptoSuite)
+
       return FabricClient.newDefaultKeyValueStore({
         path: kvs_path
-      }).then(function (store) {
-        fc.setStateStore(store);
-        console.log(`Prepopulating key/value store for ${userOpts.username} located at '${store._dir}'.`)
+      }).then((store) => {
+        fc.setStateStore(store)
+        return FabricClient.newCryptoKeyStore({
+          path: kvs_path
+        })
+      }).then((cryptoStore) => {
+        cryptoSuite.setCryptoKeyStore(cryptoStore)
+        console.log(`Prepopulating key/value store for ${userOpts.username} located at '${kvs_path}'.`)
         let obj = {}
         return fc.getUserContext(userOpts.username, true).then(user => {
           if (user !== null) {
