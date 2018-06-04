@@ -1,6 +1,6 @@
 {
   "name": "dapphero-marbles-demo",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Run IBM's Marbles dapp in a Fabric network backed by an AWS cloud host instance provisioned using offical AWS CloudFormation templates",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "DLT",
     "Dapphero"
   ],
-  "author": "Sebastian Tiedtke",
+  "author": "Sebastian Tiedtke <sebastian@dapphero.com>",
   "license": "Apache-2.0",
   "dependencies": {
     "commander": "^2.15.1",
