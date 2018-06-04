@@ -42,9 +42,9 @@ function populate(connectionProfileCfg, cryptoCfg, keyValueStorePath) {
   Promise.all(promises).then(adminOpts => {
     let cbs = adminOpts.map((userOpts) => {
       let fc = FabricClient.loadFromConfig(connectionProfileCfg)
-      let kvs_path = path.join(os.homedir(), '.hfc-key-store/')
+      let kvs_path = path.join('./dappinstances/.hfc-key-store/', userOpts._org)
       if (keyValueStorePath) {
-        kvs_path = keyValueStorePath
+        kvs_path = path.join(keyValueStorePath, userOpts._org)
       }
       creds.client = { credentialStore: { path: kvs_path } }
       let cryptoSuite = FabricClient.newCryptoSuite()
