@@ -42,16 +42,24 @@ function populate(connectionProfileCfg, cryptoCfg, keyValueStorePath) {
   Promise.all(promises).then(adminOpts => {
     let cbs = adminOpts.map((userOpts) => {
       let fc = FabricClient.loadFromConfig(connectionProfileCfg)
-      let kvs_path = path.join(os.homedir(), '.hfc-key-store/')
+      let kvs_path = path.join('./dappinstances/.hfc-key-store/', userOpts._org)
       if (keyValueStorePath) {
-        kvs_path = keyValueStorePath
+        kvs_path = path.join(keyValueStorePath, userOpts._org)
       }
       creds.client = { credentialStore: { path: kvs_path } }
+      let cryptoSuite = FabricClient.newCryptoSuite()
+      fc.setCryptoSuite(cryptoSuite)
+
       return FabricClient.newDefaultKeyValueStore({
         path: kvs_path
-      }).then(function (store) {
-        fc.setStateStore(store);
-        console.log(`Prepopulating key/value store for ${userOpts.username} located at '${store._dir}'.`)
+      }).then((store) => {
+        fc.setStateStore(store)
+        return FabricClient.newCryptoKeyStore({
+          path: kvs_path
+        })
+      }).then((cryptoStore) => {
+        cryptoSuite.setCryptoKeyStore(cryptoStore)
+        console.log(`Prepopulating key/value store for ${userOpts.username} located at '${kvs_path}'.`)
         let obj = {}
         return fc.getUserContext(userOpts.username, true).then(user => {
           if (user !== null) {
