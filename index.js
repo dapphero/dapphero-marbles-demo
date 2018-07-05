@@ -90,7 +90,7 @@ function populate(connectionProfileCfg, cryptoCfg, keyValueStorePath) {
 }
 
 program
-  .version('0.0.1', '-v, --version')
+  .version('1.1.2', '-v, --version')
   .arguments('<connectionProfileCfg> <cryptoCfg> <keyValueStorePath>')
   .action(populate)
 program.parse(process.argv)
