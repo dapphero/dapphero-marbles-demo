@@ -12,7 +12,7 @@ function populate(connectionProfileCfg, cryptoCfg, keyValueStorePath) {
   const creds = JSON.parse(fs.readFileSync(connectionProfileCfg, 'utf8'))
 
   let promises = Object.keys(creds.organizations).map(orgMSP => {
-    let org = orgMSP.substring(0, 4)
+    let org = orgMSP.substring(0, orgMSP.length - 3)
     let p = new Promise((resolve, reject) => {
       let priv = `${cryptoCfg}/peerOrganizations/${org}.example.com/users/Admin@${org}.example.com/msp/keystore/*_sk`
       glob(priv, null, (err, privkeys) => {
